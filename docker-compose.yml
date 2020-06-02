@@ -9,18 +9,22 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
 
+  event-store-db:
+    image: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - $PWD/event-store/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+
   nats-streaming-db:
     image: postgres
-    expose:
-      - "5434"
-    ports:
-      - "5434:5434"
     volumes:
       - $PWD/nats-streaming-data:/var/lib/postgresql/data
       - $PWD/pg-init-scripts:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
-    command: -p 5434
 
   nats-streaming:
     image: nats-streaming:linux
@@ -31,6 +35,6 @@ services:
       - "--cluster_id=dev"
       - "--store=SQL"
       - "--sql_driver=postgres"
-      - "--sql_source=postgres://postgres@nats-streaming-db:5434/postgres?sslmode=disable"
+      - "--sql_source=postgres://postgres@nats-streaming-db/postgres?sslmode=disable"
       - "--sql_no_caching=true"
       - "--sql_max_open_conns=80"
