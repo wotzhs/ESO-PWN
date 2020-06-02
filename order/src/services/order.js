@@ -1,5 +1,6 @@
 import Order from "../models/order";
 import pool from "../db";
+import eventStoreService from "../../clients/event-store";
 
 class OrderService {
 	static async createOrder(order) {
@@ -16,6 +17,23 @@ class OrderService {
 				`,
 				[ order.id, order.user_id, order.payee_id, order.description, order.amount, order.status ]
 			);
+
+			await new Promise((resolve, reject) => {
+				const payload = {
+					event: "order_created",
+					aggregate_id: order.id,
+					aggregate_type: "order",
+					event_data: JSON.stringify(order),
+				};
+
+				eventStoreService.createEvent(payload, async (err, resp) => {
+					if (err) {
+						reject(err);
+					}
+
+					resolve();
+				});
+			});
 
 			return res.rows[0];
 		} catch (e) {

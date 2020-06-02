@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package event;
+
+service EventStoreService {
+	rpc createEvent(EventRequest) returns (EventResponse);
+};
+
+message EventRequest {
+	string event = 1;
+	string aggregate_id = 2;
+	string aggregate_type = 3;
+	string event_data = 4;
+}
+
+message EventResponse {
+	string event_id = 1;
+	string error = 2;
+}
