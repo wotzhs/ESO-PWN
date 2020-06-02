@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  order-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - $PWD/order/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
