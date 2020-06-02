@@ -1,0 +1,10 @@
+{
+  "name": "event-store",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": ""
+  },
+  "dependencies": {
+  }
+}
