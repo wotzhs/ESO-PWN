@@ -7,14 +7,16 @@
     "transpile": "babel ./src --out-dir dist",
     "clean": "rimraf dist",
     "build": "npm-run-all clean transpile",
-    "prod": "node ./dist/bin/www",
+    "prod": "node ./dist/bin/www.js",
     "start": "NODE_ENV=production npm-run-all build prod"
   },
   "dependencies": {
+    "@grpc/proto-loader": "^0.5.4",
     "db-migrate": "^0.11.11",
     "db-migrate-pg": "^1.2.2",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "grpc": "^1.24.2",
     "http-status-codes": "^1.4.0",
     "morgan": "~1.9.1",
     "pg": "^8.2.1",
