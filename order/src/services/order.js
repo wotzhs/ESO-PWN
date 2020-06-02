@@ -22,6 +22,15 @@ class OrderService {
 			return e;
 		}
 	}
+
+	static async getOrderById(id) {
+		try {
+			const res = await pool.query("SELECT * FROM orders WHERE id = $1", [ id ]);
+			return res.rows[0];
+		} catch (e) {
+			return e;
+		}
+	}
 }
 
 export default OrderService;

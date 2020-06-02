@@ -5,16 +5,29 @@ import OrderService from "../services/order";
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-	res.json("hello world");
+router.get("/", async (req, res) => {
+	const { id } = req.query;
+	if (!id) {
+		res.status(HttpStatus.BAD_REQUEST);
+		return res.json({ error: "id param must not be empty" });
+	}
+
+	const resp = await OrderService.getOrderById(id);
+	if (resp instanceof Error) {
+		console.log(resp);
+		res.status(HttpStatus.INTERNAL_SERVER_ERROR);
+		return res.json({ error: HttpStatus.getStatusText(HttpStatus.INTERNAL_SERVER_ERROR) });
+	}
+
+	res.json(resp);
 });
 
 router.post("/", async (req, res) => {
 	const order = new Order(req.body);
-	const errors = order.validate();
-	if (errors) {
+	const error = order.validate();
+	if (error) {
 		res.status(HttpStatus.BAD_REQUEST);
-		return res.json({ errors });
+		return res.json({ error });
 	}
 
 	const resp = await OrderService.createOrder(order);
