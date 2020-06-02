@@ -1,14 +1,14 @@
 import express from "express";
 import path from "path";
 import logger from "morgan";
-import indexRouter from "./routes/index";
+import orderRouter from "./routes/orders";
 
-var app = express();
+const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/", indexRouter);
+app.use("/", orderRouter);
 
 export default app;

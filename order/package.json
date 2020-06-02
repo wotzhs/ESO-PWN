@@ -11,9 +11,14 @@
     "start": "NODE_ENV=production npm-run-all build prod"
   },
   "dependencies": {
+    "db-migrate": "^0.11.11",
+    "db-migrate-pg": "^1.2.2",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "http-status-codes": "^1.4.0",
+    "morgan": "~1.9.1",
+    "pg": "^8.2.1",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
