@@ -1,6 +1,6 @@
 import grpc from "grpc";
 import { loadSync } from "@grpc/proto-loader";
-import commonGrpcConfig from "../../grpc-common-config";
+import commonGrpcConfig from "../../../grpc-common-config";
 
 const packageDef = loadSync("event/event_store.proto", commonGrpcConfig);
 const { EventStoreService } = grpc.loadPackageDefinition(packageDef).event;

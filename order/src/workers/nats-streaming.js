@@ -1,5 +1,5 @@
 import OrderService from "../services/order";
-import eventStoreService from "../../clients/event-store";
+import eventStoreService from "../clients/event-store";
 
 class NATSStreamingWorker {
 	#client;

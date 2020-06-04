@@ -1,6 +1,6 @@
 import Order from "../models/order";
 import pool from "../db";
-import eventStoreService from "../../clients/event-store";
+import eventStoreService from "../clients/event-store";
 
 class OrderService {
 	static async createOrder(order) {
