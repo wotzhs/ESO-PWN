@@ -6,6 +6,7 @@ const natsUrl = process.env.NATS_STREAMING_SERVER_URL || "nats://0.0.0.0:4222";
 
 const connectionOptions = {
 	url: natsUrl,
+	name: clientId,
 };
 
 const sc = connect(clusterId, clientId, connectionOptions);
