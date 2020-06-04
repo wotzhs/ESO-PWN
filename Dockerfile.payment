@@ -1,0 +1,31 @@
+# ===================
+# Transpile src files
+# ===================
+FROM alpine:latest AS builder
+RUN apk add npm
+RUN mkdir app
+
+COPY payment/package.json app
+COPY payment/package-lock.json app
+WORKDIR app
+RUN npm i
+
+COPY payment .
+RUN npm run transpile
+
+# ===================
+# Run Server
+# ===================
+FROM alpine:latest
+RUN apk add nodejs
+
+COPY --from=builder app/dist app/payment/dist
+COPY --from=builder app/node_modules app/payment/node_modules
+COPY grpc-common-config.js app
+COPY proto app/proto
+
+WORKDIR app/payment
+
+ENV NODE_ENV=production
+ENTRYPOINT ["node"]
+CMD ["dist/app.js"]
