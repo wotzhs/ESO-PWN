@@ -25,15 +25,15 @@ class NATSStreamingWorker {
 				event: "payment_confirmed",
 				aggregate_id: eventData.id,
 				aggregate_type: "order",
+				event_data: JSON.stringify({ event_id: eventData.id }),
 			};
 
 			const res = await paymentService.processOrder(eventData)
 			if (res instanceof Error) {
 				eventPayload.event = "payment_declined";
-				eventPayload.event_data = JSON.stringify({});
+			} else {
+				eventPayload.event_data = JSON.stringify({ ...res, event_id: eventData.id });
 			}
-
-			eventPayload.event_data = JSON.stringify(res);
 
 			await new Promise((resolve, reject) => {
 				eventStoreService.createEvent(eventPayload, async (err, resp) => {

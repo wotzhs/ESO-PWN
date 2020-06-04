@@ -38,3 +38,4 @@ services:
       - "--sql_source=postgres://postgres@nats-streaming-db/postgres?sslmode=disable"
       - "--sql_no_caching=true"
       - "--sql_max_open_conns=80"
+      - "--http_port=8222"

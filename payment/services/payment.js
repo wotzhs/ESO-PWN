@@ -1,7 +1,7 @@
-import PaymentConfigurable from "../clients/payment-configurable";
-import PaymentRandom from "../clients/payment-random";
+import MockedPaymentProvider from "../clients/mocked-payment-provider";
 
-const PaymentClient = process.env.NODE_ENV == "dev" ? PaymentRandom : PaymentConfigurable;
+// TODO: if prod env use real payment provider client (not within the assessment scope)
+const PaymentClient = process.env.NODE_ENV != "prod" ? MockedPaymentProvider : null;
 
 class PaymentService {
 	#client;
