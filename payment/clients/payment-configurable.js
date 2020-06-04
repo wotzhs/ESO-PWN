@@ -1,10 +1,14 @@
 import { v4 as uuidV4 } from "uuid";
 
 class PaymentConfigurable {
-	#preApprovedPayments = { "test": true };
+	#preApprovedPaymentsPrefixes = ["test"];
 
 	pay(eventData) {
-		return this.#preApprovedPayments[eventData.description] ? { payment_ref: uuidV4() } : Error("Payment declined");
+		for (let i=0; i<this.#preApprovedPaymentsPrefixes; i++) {
+			return eventData.description.startsWith(this.#preApprovedPaymentsPrefixes[i]) 
+					? { payment_ref: uuidV4() } 
+					: Error("Payment declined");
+		}
 	}
 }
 
