@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 import pool from "../db";
-import sc from "../../clients/nats-streaming";
+import sc from "../clients/nats-streaming";
 
 const eventToChannelMapping = {
 	"order_created": "order.created",

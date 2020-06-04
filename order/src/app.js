@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import logger from "morgan";
 import orderRouter from "./routes/orders";
-import sc from "../clients/nats-streaming";
+import sc from "./clients/nats-streaming";
 import NATSStreamingWorker from "./workers/nats-streaming";
 
 const app = express();
