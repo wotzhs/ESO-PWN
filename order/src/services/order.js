@@ -49,6 +49,17 @@ class OrderService {
 			return e;
 		}
 	}
+
+	static async updateOrderStatusById({ id, status }) {
+		try {
+			await pool.query(
+				"UPDATE orders SET status=$1, updated_at=$2 WHERE id=$3",
+				[ status, new Date().toISOString(), id ]
+			);
+		} catch (e) {
+			return e;
+		}
+	}
 }
 
 export default OrderService;
