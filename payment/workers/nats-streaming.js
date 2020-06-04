@@ -33,7 +33,7 @@ class NATSStreamingWorker {
 				eventPayload.event_data = JSON.stringify({});
 			}
 
-			eventPayload.event_data = JSON.stringify(res);
+			eventPayload.event_data = JSON.stringify({ ...res, aggregate_id: eventData.id });
 
 			await new Promise((resolve, reject) => {
 				eventStoreService.createEvent(eventPayload, async (err, resp) => {
