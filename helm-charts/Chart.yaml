@@ -1,0 +1,11 @@
+apiVersion: v2
+name: helm-charts
+description: A Helm chart for ESO-PWN application stack
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+
+dependencies:
+  - name: nats-streaming-db
+    version: 0.1.0
+    repository: file://charts/nats-streaming-db
