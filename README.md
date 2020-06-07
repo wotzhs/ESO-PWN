@@ -37,9 +37,8 @@ docker-compose up -d nats-streaming
 ```
 
 **Sample create order request**
-```
-POST to localhost:3000
-
+```json
+/POST localhost:3000, with the following body:
 {
 	"amount": 207.00,
 	"description": "test top up e wallet"
@@ -47,7 +46,7 @@ POST to localhost:3000
 ```
 
 **Sample create order response**
-```
+```json
 {
 	"id": "5e686586-5314-4f7d-bd0a-050cdca2d741"
 }
@@ -55,11 +54,11 @@ POST to localhost:3000
 
 **Sample get order status request**
 ```
-GET to localhost:3000?id=5e686586-5314-4f7d-bd0a-050cdca2d741
+/GET localhost:3000?id=5e686586-5314-4f7d-bd0a-050cdca2d741
 ```
 
 **Sample get order status response**
-```
+```json
 {
     "id": "5e686586-5314-4f7d-bd0a-050cdca2d741",
     "amount": "207.00",
@@ -76,8 +75,28 @@ GET to localhost:3000?id=5e686586-5314-4f7d-bd0a-050cdca2d741
 
 To run the integration test, ensure all the docker services have started and in proper order.
 
-Then from project root:
+Then from project root, open 4 terminals (1-3 to start the services in development, and 4 to run the integeration test):
+
+**Terminal 1**:
+```shell
+cd order
+npm run dev
 ```
+
+**Terminal 2**:
+```shell
+cd event-store
+npm run dev
+```
+
+**Terminal 3**:
+```shell
+cd payment
+npm run dev
+```
+
+**Terminal 4**
+```shell
 cd order
 npm run test:integration
 ```
