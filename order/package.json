@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build": "npm-run-all clean transpile",
     "prod": "node ./dist/bin/www.js",
-    "start": "NODE_ENV=production npm-run-all build prod"
+    "start": "NODE_ENV=production npm-run-all build prod",
+    "test:integration": "jest --testPathPattern=integration-tests"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.4",
@@ -30,7 +31,9 @@
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-proposal-private-methods": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
+    "axios": "^0.19.2",
     "eslint": "^7.1.0",
+    "jest": "^26.0.1",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "regenerator-runtime": "^0.13.5",
