@@ -16,6 +16,10 @@ spec:
       labels:
         app: {{ .Chart.Name }}
     spec:
+      volumes:
+        - name: {{ .Chart.Name }}-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-pvc
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -35,8 +39,10 @@ spec:
               mountPath: {{ .mountPath }}
             {{- end }}
       volumes:
-        {{- range .Values.volumes }}
+        {{- range $volume := .Values.volumes }}
         - name: {{ .name }}
+          {{- if hasKey $volume "configMap" }}
           configMap:
             name: {{ .configMap.name }}
+          {{- end }}
         {{- end }}

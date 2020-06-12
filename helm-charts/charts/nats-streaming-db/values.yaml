@@ -37,12 +37,21 @@ volumes:
   - name: nats-streaming-initdb-script
     configMap:
       name: nats-streaming-initdb-script
+  - name: nats-streaming-db-pvc
 
 volumeMounts:
   - name: nats-streaming-initdb-script
     mountPath: /docker-entrypoint-initdb.d
+  - name: nats-streaming-db-pvc
+    mountPath: /var/lib/postgresql/data
 
 service:
   - protocol: TCP
     port: 5432
     targetPort: 5432
+
+pvc:
+  accessModes: 
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  storageSize: 1Gi
