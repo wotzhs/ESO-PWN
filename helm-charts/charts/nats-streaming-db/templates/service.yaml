@@ -3,11 +3,13 @@ kind: Service
 metadata:
   name: {{ .Chart.Name }}
   labels:
-    group: {{ .Values.group }}
+    app: {{ .Chart.Name }}
 spec:
-  type: {{ .Values.service.type }}
   selector:
     app: {{ .Chart.Name }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+    {{- range .Values.service }}
+    - protocol: {{ .protocol }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+    {{- end }}

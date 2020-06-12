@@ -1,35 +1,19 @@
-replicaCount: 1
-
-group: db
-
-image:
+image: 
   repository: postgres
   pullPolicy: IfNotPresent
   tag: latest
 
-service:
-  type: ClusterIP
-  port: 5434
-  targetPort: 5432
+ports:
+  - containerPort: 5432
 
-volume:
-  name: nats-streaming-db
-  kind: PersistentVolumeClaim
-  mountPath: /var/lib/postgresql/data
-  accessMode: ReadWriteOnce
-  storage: 2Gi
+env:
+  - name: POSTGRES_HOST_AUTH_METHOD
+    value: trust
 
-config:
-  name: nats-streaming-db-env
-  data:
-    - key: POSTGRES_HOST_AUTH_METHOD
-      value: trust
-
-initdb:
-  name: nats-streaming-db-initdb-script
-  mountPath: /docker-entrypoint-initdb.d
-  data:
-    sql: |
+configMap:
+  metadata:
+    name: nats-streaming-initdb-script
+    data: |
       CREATE TABLE IF NOT EXISTS ServerInfo (uniquerow INTEGER DEFAULT 1, id VARCHAR(1024), proto BYTEA, version INTEGER, PRIMARY KEY (uniquerow));
       CREATE TABLE IF NOT EXISTS Clients (id VARCHAR(1024), hbinbox TEXT, PRIMARY KEY (id));
       CREATE TABLE IF NOT EXISTS Channels (id INTEGER, name VARCHAR(1024) NOT NULL, maxseq BIGINT DEFAULT 0, maxmsgs INTEGER DEFAULT 0, maxbytes BIGINT DEFAULT 0, maxage BIGINT DEFAULT 0, deleted BOOL DEFAULT FALSE, PRIMARY KEY (id));
@@ -40,5 +24,20 @@ initdb:
       CREATE TABLE IF NOT EXISTS SubsPending (subid BIGINT, row BIGINT, seq BIGINT DEFAULT 0, lastsent BIGINT DEFAULT 0, pending BYTEA, acks BYTEA, CONSTRAINT PK_MsgPendingKey PRIMARY KEY(subid, row));
       CREATE INDEX Idx_SubsPendingSeq ON SubsPending (seq);
       CREATE TABLE IF NOT EXISTS StoreLock (id VARCHAR(30), tick BIGINT DEFAULT 0);
+
       -- Updates for 0.10.0
       ALTER TABLE Clients ADD proto BYTEA;
+
+volumes:
+  - name: nats-streaming-initdb-script
+    configMap:
+      name: nats-streaming-initdb-script
+
+volumeMounts:
+  - name: nats-streaming-initdb-script
+    mountPath: /docker-entrypoint-initdb.d
+
+service:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
