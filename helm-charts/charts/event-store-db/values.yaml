@@ -1,0 +1,34 @@
+autoscaling:
+  enabled: false
+
+replicaCount: 1
+
+image: 
+  repository: postgres
+  pullPolicy: IfNotPresent
+  tag: latest
+
+ports:
+  - containerPort: 5432
+
+env:
+  - name: POSTGRES_HOST_AUTH_METHOD
+    value: trust
+
+volumes:
+  - name: order-db-pvc
+
+volumeMounts:
+  - name: order-db-pvc
+    mountPath: /var/lib/postgresql/data
+
+service:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+pvc:
+  accessModes: 
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  storageSize: 1Gi
