@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-order-db
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate-order-db
+          image: seanwong/eso-pwn.order
+          command: ["node_modules/.bin/db-migrate"]
+          args: ["up"]
+          env:
+            - name: DATABASE_URL
+              value: postgres://postgres@order-db.default.svc.cluster.local/postgres?sslmode=disable
+      restartPolicy: Never
+  backoffLimit: 4
