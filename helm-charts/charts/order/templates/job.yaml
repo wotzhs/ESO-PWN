@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: migrate-order-db
   annotations:
-    "helm.sh/hook": post-install
+    "helm.sh/hook": post-install, post-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
