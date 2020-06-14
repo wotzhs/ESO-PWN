@@ -1,0 +1,25 @@
+autoscaling:
+  enabled: false
+
+replicaCount: 1
+
+image: 
+  repository: seanwong/eso-pwn.payment
+  pullPolicy: Always
+  tag: latest
+
+configMap:
+  metadata:
+    name: payment-envs
+    data:
+      - name: GRPC_SERVER_IP
+        value: event-store.default.svc.cluster.local
+      - name: EVENT_PORT
+        value: 50051
+      - name: NATS_STREAMING_CLUSTER_ID
+        value: dev
+      - name: NATS_STREAMING_CLIENT_ID
+        value: payment
+      - name: NATS_STREAMING_SERVER_URL
+        value: nats://nats-streaming-clients.default.svc.cluster.local:4222
+        

@@ -1,0 +1,30 @@
+autoscaling:
+  enabled: false
+
+replicaCount: 1
+
+image: 
+  repository: seanwong/eso-pwn.event-store
+  pullPolicy: Always
+  tag: latest
+
+ports:
+  - containerPort: 50051
+
+configMap:
+  metadata:
+    name: event-store-envs
+    data:
+      - name: DATABASE_URL
+        value: postgres://postgres@event-store-db.default.svc.cluster.local/postgres?sslmode=disable
+      - name: NATS_STREAMING_CLUSTER_ID
+        value: dev
+      - name: NATS_STREAMING_CLIENT_ID
+        value: event-store
+      - name: NATS_STREAMING_SERVER_URL
+        value: nats://nats-streaming-clients.default.svc.cluster.local:4222
+        
+service:
+  - protocol: TCP
+    port: 50051
+    targetPort: 50051

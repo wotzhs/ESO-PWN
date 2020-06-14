@@ -2,9 +2,14 @@
 
 Event Sourcing Order-Payment with NATS
 
-## Getting Started
+## <a name="getting-started"></a>Table of Contents
 
-### Application Overview
++ [Application Overview](#application-overview)
++ [Development](#development)
++ [Integration Test](#integration-test)
++ [Kubernetes](#kubernetes)
+
+### <a name="application-overview"></a>Application Overview
 ```
                                      ===============
                                      | event-store |
@@ -27,14 +32,36 @@ Event Sourcing Order-Payment with NATS
 8. **Event-store** publishes `order_confirmed` if payment was confirmed, and `order_cancelled` if payment was declined.
 9. **Order service** is subscribed to `order_confirmed` and update the corresponding order status to `delivered` upon receiving such event.
 10. **Event-store** publishes `order_delivered` event.
-### Development
 
-**IMPORTANT**: Due to the docker nats-streaming image not having a shell, it is not possible to wait for the db connection before start itself. Hence the docker services have to be started exactly in the following order:
+### <a name="development"></a>Development
+
+**Start docker services**
 
 ```shell
-docker-compose up -d order-db event-store-db nats-streaming-db 
-docker-compose up -d nats-streaming
+docker-compose up -d 
 ```
+
+**Start applications**
+From project root, open 4 terminals
+
+**Terminal 1**:
+```shell
+cd order
+npm run dev
+```
+
+**Terminal 2**:
+```shell
+cd event-store
+npm run dev
+```
+
+**Terminal 3**:
+```shell
+cd payment
+npm run dev
+```
+
 
 **Sample create order request**
 ```json
@@ -71,7 +98,7 @@ docker-compose up -d nats-streaming
 }
 ```
 
-### Integration Test
+### <a name="integration-test"></a>Integration Test
 
 To run the integration test, ensure all the docker services have started and in proper order.
 
@@ -99,4 +126,32 @@ npm run dev
 ```shell
 cd order
 npm run test:integration
+```
+
+### <a name="kubernetes"></a>Kubernetes
+
+This assumes that you have [helm](https://helm.sh/) installed.
+
+From the project root:
+
+```shell
+helm install <release-name> helm-charts
+```
+
+To interact with the order api, the ip of the order service can be obtained via:
+```shell
+kubectl get svc/order
+```
+Sample output
+```shell
+NAME    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+order   ClusterIP   10.43.219.72   <none>        3000/TCP   16s
+```
+
+Now can proceed to POST / GET to 10.43.219.72:3000 to create / get order.
+
+To stop the stack:
+
+```shell
+helm uninstall <release-name>
 ```

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-event-store-db
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate-event-store-db
+          image: seanwong/eso-pwn.event-store
+          command: ["node_modules/.bin/db-migrate"]
+          args: ["up"]
+          env:
+            - name: DATABASE_URL
+              value: postgres://postgres@event-store-db.default.svc.cluster.local/postgres?sslmode=disable
+      restartPolicy: Never
+  backoffLimit: 4
