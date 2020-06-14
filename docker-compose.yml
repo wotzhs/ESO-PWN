@@ -39,3 +39,6 @@ services:
       - "--sql_no_caching=true"
       - "--sql_max_open_conns=80"
       - "--http_port=8222"
+    deploy:
+      restart_policy:
+        condition: on-failure
