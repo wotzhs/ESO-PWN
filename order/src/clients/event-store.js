@@ -5,8 +5,9 @@ import commonGrpcConfig from "../../../grpc-common-config";
 const packageDef = loadSync("event/event_store.proto", commonGrpcConfig);
 const { EventStoreService } = grpc.loadPackageDefinition(packageDef).event;
 
-const EVENT_STORE_URL = process.env.EVENT_STORE_URL || "0.0.0.0:50051";
+const GRPC_SERVER_IP = process.env.GRPC_SERVER_IP || "0.0.0.0";
+const EVENT_PORT = process.env.EVENT_PORT || "50051";
 
-const eventStoreService = new EventStoreService(EVENT_STORE_URL, grpc.credentials.createInsecure());
+const eventStoreService = new EventStoreService(`${GRPC_SERVER_IP}:${EVENT_PORT}`, grpc.credentials.createInsecure());
 
 export default eventStoreService;
