@@ -6,7 +6,7 @@ types.setTypeParser(1114, (str) => {
 });
 
 const pool = new Pool({
-	connectionString: process.env.EVENT_DB_URL,
+	connectionString: process.env.DATABASE_URL,
 });
 
 export default pool;
