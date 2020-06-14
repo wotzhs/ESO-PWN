@@ -7,5 +7,16 @@ appVersion: 1.16.0
 
 dependencies:
   - name: nats-streaming-db
-    version: 0.1.0
     repository: file://charts/nats-streaming-db
+  - name: nats-streaming
+    repository: file://charts/nats-streaming
+  - name: order-db
+    repository: file://charts/order-db
+  - name: event-store-db
+    repository: file://charts/event-store-db
+  - name: order
+    repository: file://charts/order
+  - name: event-store
+    repository: file://charts/event-store
+  - name: payment
+    repository: file://charts/payment
